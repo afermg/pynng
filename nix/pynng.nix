@@ -34,21 +34,15 @@ buildPythonPackage rec {
   pname = "pynng";
   version = "0.8.1";
   format = "setuptools";
-  # src = ./..; # For local testing, add flag --impure when running
-  # src = fetchFromGitHub {
-  #   owner = "codypiersall";
-  #   repo = "pynng";
-  #   rev = "28bb5c8fd5b145cf255233d8bc071ec25e083e68";
-  #   sha256 = "sha256-HxsHcGbSExp1aG5yMR/J3kPL4zqnmNoN5T5wfV3APaw=";
-  # };
   src = fetchFromGitHub {
-    owner = "afermg";
+    owner = "codypiersall";
     repo = "pynng" ;
-    rev = "e254adc2bca0c70ca30554cdb1db16ae1e496460";
-    sha256 = "sha256-13HloXwjVHm39J9N5GlHJ8T7X7XVcnclMsbhY2o6tac=";
+    rev = "2179328f8a858bbb3e177f66ac132bde4a5aa859";
+    sha256 = "sha256-TxIVcqc+4bro+krc1AWgLdZKGGuQ2D6kybHnv5z1oHg=";
   };
-  # sourceRoot = "${src}";
   preBuild = ''
+  ls -lh
+  pwd
   cp -r ${mbedtls} mbedtls
   chmod -R +w mbedtls
   cp -r ${nng} nng
@@ -72,7 +66,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   meta = {
     description = "pynng";
-    homepage = "https://github.com/afermg/pynng";
+    homepage = "https://github.com/codypiersall/pynng";
     license = lib.licenses.mit;
   };
 }

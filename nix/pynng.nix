@@ -1,18 +1,21 @@
 {
   lib,
   # build deps
+  cmake,
   buildPythonPackage,
   fetchFromGitHub,
   # Py build
   setuptools,
   setuptools-scm,
+  cffi,
+  sniffio,
+  # test/docs deps
   pytest,
   trio,
   sphinx,
-  # main deps
-  cffi,
-  cmake,
-  sniffio,
+  # Optional
+  ninja,
+  python-mbedtls,
 }:
 let
     nng = fetchFromGitHub {
@@ -30,15 +33,15 @@ let
 in
 buildPythonPackage {
   preBuild = ''
-  cp -r ${nng} nng
   cp -r ${mbedtls} mbedtls
-  chmod -R +w nng
   chmod -R +w mbedtls
+  cp -r ${nng} nng
+  chmod -R +w nng
   pwd
   ls -l
   '';
   # buildPhase = "runHook preBuild" ++ old.buildPhase;
-  pname = "pyngg";
+  pname = "pynng";
   version = "0.8.1";
   src = ./..; # For local testing, add flag --impure when running
   # src = fetchFromGitHub {
@@ -49,6 +52,7 @@ buildPythonPackage {
   # };
   nativeBuildInputs = [
     cmake
+    ninja
   ];
   build-system = [
     setuptools
@@ -60,17 +64,23 @@ buildPythonPackage {
     cffi
     sniffio
   ];
+  # installPhase = ''
+  # python setup.py build
+  # python setup.py build_ext --inplace
+  # '';
+  
   propagatedBuildInputs = [
   ];
   dependencies = [
+    python-mbedtls
   ];
   pythonImportsCheck = [
+    "pynng"
   ];
-  # dontUseCmakeBuildDir = true;
-  pyproject = true;
+  # pyproject = true;
   dontUseCmakeConfigure = true;
   meta = {
-    description = "pyngg";
+    description = "pynng";
     homepage = "https://github.com/afermg/pynng";
     license = lib.licenses.mit;
   };

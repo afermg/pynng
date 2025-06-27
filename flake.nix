@@ -30,14 +30,14 @@
       with pkgs;
       rec {
         packages = {
-          pyngg = pkgs.python312.pkgs.callPackage ./nix/pyngg.nix { };
+          pynng = pkgs.python312.pkgs.callPackage ./nix/pynng.nix { };
         };
         devShells = {
           default =
             let
               python_with_pkgs = (
                 python312.withPackages (pp: [
-                  packages.pyngg
+                  packages.pynng
                 ])
               );
             in

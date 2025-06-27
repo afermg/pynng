@@ -46,7 +46,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   meta = {
     description = "pynng";
-    homepage = "https://github.com/afermg/pynng";
+    homepage = "https://github.com/codypiersall/pynng";
     license = lib.licenses.mit;
   };
 }

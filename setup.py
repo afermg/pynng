@@ -1,8 +1,8 @@
 import os
-from subprocess import check_call
 import platform
 import shutil
 import sys
+from subprocess import check_call
 
 if platform.machine() == "i686" and platform.system() == "Linux":
     # mbedtls v3.5.1 will not build without these flags on 32-bit linux.
@@ -10,7 +10,7 @@ if platform.machine() == "i686" and platform.system() == "Linux":
     # this is hopefully going to be fixed in another release.
     # There is probably a better way to do this...
     os.environ["CFLAGS"] = "-mpclmul -msse2 -maes"
-from setuptools import Command, setup, find_packages
+from setuptools import Command, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
 WINDOWS = sys.platform == "win32"
@@ -60,11 +60,11 @@ class BuilderBase(Command):
 
     def run(self):
         """Clone nng and build it with cmake, with TLS enabled."""
-        if not os.path.exists(self.git_dir):
-            check_call("git clone {}".format(self.repo), shell=True)
-            check_call("git checkout {}".format(self.rev), shell=True, cwd=self.git_dir)
-        if not os.path.exists(self.build_dir):
-            os.mkdir(self.build_dir)
+        # if not os.path.exists(self.git_dir):
+        # check_call("git clone {}".format(self.repo), shell=True)
+        # check_call("git checkout {}".format(self.rev), shell=True, cwd=self.git_dir)
+        # if not os.path.exists(self.build_dir):
+        #     os.mkdir(self.build_dir)
 
         cmake_cmd = [*self.cmake_cmd, *self.cmake_extra_args, ".."]
         print(f"building {self.git_dir} with:", cmake_cmd, flush=True)

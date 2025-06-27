@@ -36,8 +36,6 @@ buildPythonPackage {
   chmod -R +w mbedtls
   cp -r ${nng} nng
   chmod -R +w nng
-  pwd
-  ls -l
   '';
   pname = "pynng";
   version = "0.8.1";

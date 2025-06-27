@@ -3,7 +3,7 @@
   # build deps
   cmake,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   # Py build
   setuptools,
   setuptools-scm,
@@ -12,22 +12,48 @@
   # test/docs deps
   pytest,
   trio,
+  sphinx,
   # Optional
   ninja,
 }:
+let
+    nng = fetchFromGitHub {
+    owner = "nanomsg";
+    repo = "nng";
+    rev = "v1.6.0";
+    sha256 = "sha256-Kq8QxPU6SiTk0Ev2IJoktSPjVOlAS4/e1PQvw2+e8UA=";
+  };
+  mbedtls = fetchFromGitHub {
+    owner = "ARMmbed";
+    repo = "mbedtls";
+    rev = "v3.5.1";
+    sha256 = "sha256-HxsHcGbSExp1aG5yMR/J3kPL4zqnmNoN5T5wfV3APaw=";
+  };
+in
 buildPythonPackage rec {
   pname = "pynng";
   version = "0.8.1";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-YBZfNL31AYheCszq7tebw1pX88o8kTyzjBSRm5vTZW8=" ;
-  }; # For local testing, add flag --impure when running
+  format = "setuptools";
+  # src = ./..; # For local testing, add flag --impure when running
   # src = fetchFromGitHub {
-  #   owner = "afermg";
+  #   owner = "codypiersall";
   #   repo = "pynng";
-  #   rev = "c90c1bbc9ecdfda931f9963d1c1e7734da33c58b";
-  #   sha256 = "";
+  #   rev = "28bb5c8fd5b145cf255233d8bc071ec25e083e68";
+  #   sha256 = "sha256-HxsHcGbSExp1aG5yMR/J3kPL4zqnmNoN5T5wfV3APaw=";
   # };
+  src = fetchFromGitHub {
+    owner = "afermg";
+    repo = "pynng" ;
+    rev = "e254adc2bca0c70ca30554cdb1db16ae1e496460";
+    sha256 = "sha256-13HloXwjVHm39J9N5GlHJ8T7X7XVcnclMsbhY2o6tac=";
+  };
+  # sourceRoot = "${src}";
+  preBuild = ''
+  cp -r ${mbedtls} mbedtls
+  chmod -R +w mbedtls
+  cp -r ${nng} nng
+  chmod -R +w nng
+  '';
   nativeBuildInputs = [
     cmake
     ninja
@@ -36,7 +62,7 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     sniffio
   ];
@@ -46,7 +72,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
   meta = {
     description = "pynng";
-    homepage = "https://github.com/codypiersall/pynng";
+    homepage = "https://github.com/afermg/pynng";
     license = lib.licenses.mit;
   };
 }

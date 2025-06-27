@@ -39,15 +39,14 @@ buildPythonPackage {
   pwd
   ls -l
   '';
-  # buildPhase = "runHook preBuild" ++ old.buildPhase;
   pname = "pynng";
   version = "0.8.1";
   src = ./..; # For local testing, add flag --impure when running
   # src = fetchFromGitHub {
   #   owner = "afermg";
-  #   repo = "baby";
-  #   rev = "39eec0d4c3b8fad9b0a8683cbedf9b4558e07222";
-  #   sha256 = "sha256-ptLXindgixDa4AV3x+sQ9I4W0PScIQMkyMNMo0WFa0M=";
+  #   repo = "pynng";
+  #   rev = "c90c1bbc9ecdfda931f9963d1c1e7734da33c58b";
+  #   sha256 = "";
   # };
   nativeBuildInputs = [
     cmake
@@ -63,19 +62,9 @@ buildPythonPackage {
     cffi
     sniffio
   ];
-  # installPhase = ''
-  # python setup.py build
-  # python setup.py build_ext --inplace
-  # '';
-  
-  propagatedBuildInputs = [
-  ];
-  dependencies = [
-  ];
   pythonImportsCheck = [
     "pynng"
   ];
-  # pyproject = true;
   dontUseCmakeConfigure = true;
   meta = {
     description = "pynng";

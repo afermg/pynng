@@ -15,7 +15,6 @@
   sphinx,
   # Optional
   ninja,
-  python-mbedtls,
 }:
 let
     nng = fetchFromGitHub {
@@ -72,7 +71,6 @@ buildPythonPackage {
   propagatedBuildInputs = [
   ];
   dependencies = [
-    python-mbedtls
   ];
   pythonImportsCheck = [
     "pynng"

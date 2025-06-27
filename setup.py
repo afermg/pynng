@@ -60,11 +60,11 @@ class BuilderBase(Command):
 
     def run(self):
         """Clone nng and build it with cmake, with TLS enabled."""
-        # if not os.path.exists(self.git_dir):
-        # check_call("git clone {}".format(self.repo), shell=True)
-        # check_call("git checkout {}".format(self.rev), shell=True, cwd=self.git_dir)
-        # if not os.path.exists(self.build_dir):
-        #     os.mkdir(self.build_dir)
+        if not os.path.exists(self.git_dir):
+            check_call("git clone {}".format(self.repo), shell=True)
+            check_call("git checkout {}".format(self.rev), shell=True, cwd=self.git_dir)
+        if not os.path.exists(self.build_dir):
+            os.mkdir(self.build_dir)
 
         cmake_cmd = [*self.cmake_cmd, *self.cmake_extra_args, ".."]
         print(f"building {self.git_dir} with:", cmake_cmd, flush=True)

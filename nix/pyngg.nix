@@ -12,6 +12,7 @@
   # main deps
   cffi,
   cmake,
+  sniffio,
 }:
 let
     nng = fetchFromGitHub {
@@ -31,14 +32,12 @@ buildPythonPackage {
   preBuild = ''
   cp -r ${nng} nng
   cp -r ${mbedtls} mbedtls
+  chmod -R +w nng
+  chmod -R +w mbedtls
   pwd
   ls -l
-  mkdir -p mbedtls/build
   '';
-  buildPhase = ''
-  runHook preBuild
-  python setup.py sdist bdist_wheel
-  '';
+  # buildPhase = "runHook preBuild" ++ old.buildPhase;
   pname = "pyngg";
   version = "0.8.1";
   src = ./..; # For local testing, add flag --impure when running
@@ -48,17 +47,18 @@ buildPythonPackage {
   #   rev = "39eec0d4c3b8fad9b0a8683cbedf9b4558e07222";
   #   sha256 = "sha256-ptLXindgixDa4AV3x+sQ9I4W0PScIQMkyMNMo0WFa0M=";
   # };
-  # installPhase = ''
-  # ls
-  # '';
-  # format="other";
   nativeBuildInputs = [
     cmake
+  ];
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
   buildInputs = [
     setuptools
     setuptools-scm
     cffi
+    sniffio
   ];
   propagatedBuildInputs = [
   ];
@@ -67,6 +67,7 @@ buildPythonPackage {
   pythonImportsCheck = [
   ];
   # dontUseCmakeBuildDir = true;
+  pyproject = true;
   dontUseCmakeConfigure = true;
   meta = {
     description = "pyngg";

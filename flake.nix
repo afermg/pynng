@@ -29,14 +29,12 @@
       in
       with pkgs;
       rec {
-        packages = {
-          pynng = pkgs.python312.pkgs.callPackage ./nix/pynng.nix { };
-        };
+        packages = pkgs.callPackage ./nix { };
         devShells = {
           default =
             let
               python_with_pkgs = (
-                python312.withPackages (pp: [
+                python3.withPackages (pp: [
                   packages.pynng
                 ])
               );

@@ -1,23 +1,20 @@
 {
   lib,
-  # build deps
   cmake,
+  ninja,
   buildPythonPackage,
   fetchFromGitHub,
-  # Py build
   setuptools,
   setuptools-scm,
   cffi,
   sniffio,
-  # test/docs deps
   pytest,
   trio,
-  sphinx,
-  # Optional
-  ninja,
+  pytest-trio,
+  pytest-asyncio,
 }:
 let
-    nng = fetchFromGitHub {
+  nng = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
     rev = "v1.6.0";
@@ -36,18 +33,10 @@ buildPythonPackage rec {
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "codypiersall";
-    repo = "pynng" ;
+    repo = "pynng";
     rev = "2179328f8a858bbb3e177f66ac132bde4a5aa859";
     sha256 = "sha256-TxIVcqc+4bro+krc1AWgLdZKGGuQ2D6kybHnv5z1oHg=";
   };
-  preBuild = ''
-  ls -lh
-  pwd
-  cp -r ${mbedtls} mbedtls
-  chmod -R +w mbedtls
-  cp -r ${nng} nng
-  chmod -R +w nng
-  '';
   nativeBuildInputs = [
     cmake
     ninja
@@ -56,16 +45,27 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
+  preBuild = ''
+    cp -r ${mbedtls} mbedtls
+    chmod -R +w mbedtls
+    cp -r ${nng} nng
+    chmod -R +w nng
+  '';
+  dontUseCmakeConfigure = true;
   dependencies = [
     cffi
     sniffio
+    pytest
+    trio
+    pytest-trio
+    pytest-asyncio
   ];
   pythonImportsCheck = [
     "pynng"
+    "pytest"
   ];
-  dontUseCmakeConfigure = true;
   meta = {
-    description = "pynng";
+    description = "Python bindings for Nanomsg Next Generation.";
     homepage = "https://github.com/codypiersall/pynng";
     license = lib.licenses.mit;
   };
